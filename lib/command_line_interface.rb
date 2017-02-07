@@ -1,10 +1,52 @@
+require_relative "../lib/api_communicator.rb"
+
 def welcome
-  # puts out a welcome message here!
-  puts "Welcome to the Star Wars Character Movie Database!!!"
+  puts %q[Welcome to the <(^^<) Star Wars Character Movie Database!!! (>^^)>
+
+                                __...------------._
+                             ,-'                   `-.
+                          ,-'                         `.
+                        ,'                            ,-`.
+                       ;                              `-' `.
+                      ;                                 .-. \
+                     ;                           .-.    `-'  \
+                    ;                            `-'          \
+                   ;                                          `.
+                   ;                                           :
+                  ;                                            |
+                 ;                                             ;
+                ;                            ___              ;
+               ;                        ,-;-','.`.__          |
+           _..;                      ,-' ;`,'.`,'.--`.        |
+          ///;           ,-'   `. ,-'   ;` ;`,','_.--=:      /
+         |'':          ,'        :     ;` ;,;,,-'_.-._`.   ,'
+         '  :         ;_.-.      `.    :' ;;;'.ee.    \|  /
+          \.'    _..-'/8o. `.     :    :! ' ':8888)   || /
+           ||`-''    \\88o\ :     :    :! :  :`""'    ;;/
+           ||         \"88o\;     `.    \ `. `.      ;,'
+           /)   ___    `."'/(--.._ `.    `.`.  `-..-' ;--.
+           \(.="""""==.. `'-'     `.|      `-`-..__.-' `. `.
+            |          `"==.__      )                    )  ;
+            |   ||           `"=== '                   .'  .'
+            /\,,||||  | |           \                .'   .'
+            | |||'|' |'|'           \|             .'   _.' \
+            | |\' |  |           || ||           .'    .'    \
+            ' | \ ' |'  .   ``-- `| ||         .'    .'       \
+              '  |  ' |  .    ``-.._ |  ;    .'    .'          `.
+           _.--,;`.       .  --  ...._,'   .'    .'              `.__
+         ,'  ,';   `.     .   --..__..--'.'    .'                __/_\
+       ,'   ; ;     |    .   --..__.._.'     .'                ,'     `.
+      /    ; :     ;     .    -.. _.'     _.'                 /         `
+     /     :  `-._ |    .    _.--'     _.'                   |
+    /       `.    `--....--''       _.'                      |
+              `._              _..-'                         |
+                 `-..____...-''                              |
+                                                             |
+                                   mGk                       |
+  ]
 end
 
 def get_character_from_user
-  puts "please enter a character's name"
-  # use gets to capture the user's input. This method should return that input, downcased.
+  puts "Please enter a character's name:"
   character = gets.chomp
 end

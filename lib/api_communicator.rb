@@ -1,20 +1,23 @@
 require 'rest-client'
 require 'json'
 require 'pry'
+require_relative "../lib/command_line_interface.rb"
 
 def get_character_movies_from_api(character)
-
   films = []
   merged_char_arr.each do |char_hash|
-      # binding.pry
-      # puts character
     if char_hash["name"].downcase == character.downcase
       puts "#{char_hash["name"]} has been in the following films:"
       films = char_hash["films"]
     end
   end
-
-  get_films_from_api(films)
+  if films == []
+    puts "Invalid character, please try again."
+    character = get_character_from_user
+    get_character_movies_from_api(character)
+  else
+    get_films_from_api(films)
+  end
 end
 
 def parse_character_movies(films_hash_array)
@@ -41,7 +44,6 @@ def merged_char_arr
   9.times do
     all_characters = RestClient.get("http://www.swapi.co/api/people/?page=#{i}")
     pg_hash = JSON.parse(all_characters)
-    # binding.pry
     character_arr << pg_hash["results"]
     i += 1
   end
