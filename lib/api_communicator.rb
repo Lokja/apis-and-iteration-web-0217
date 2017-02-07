@@ -3,31 +3,47 @@ require 'json'
 require 'pry'
 
 def get_character_movies_from_api(character)
-  #make the web request
-  all_characters = RestClient.get('http://www.swapi.co/api/people/')
-  character_hash = JSON.parse(all_characters)
-  
-  # iterate over the character hash to find the collection of `films` for the given
-  #   `character`
-  # collect those film API urls, make a web request to each URL to get the info
-  #  for that film
-  # return value of this method should be collection of info about each film.
-  #  i.e. an array of hashes in which each hash reps a given film
-  # this collection will be the argument given to `parse_character_movies`
-  #  and that method will do some nice presentation stuff: puts out a list
-  #  of movies by title. play around with puts out other info about a given film.
+
+  films = []
+  merged_char_arr.each do |char_hash|
+      # binding.pry
+      # puts character
+    if char_hash["name"].downcase == character.downcase
+      puts "#{char_hash["name"]} has been in the following films:"
+      films = char_hash["films"]
+    end
+  end
+
+  get_films_from_api(films)
 end
 
-def parse_character_movies(films_hash)
-  # some iteration magic and puts out the movies in a nice list
+def parse_character_movies(films_hash_array)
+  films_hash_array.each.with_index(1) do |movie, i|
+    puts "-- #{movie["title"]}"
+  end
 end
 
 def show_character_movies(character)
-  films_hash = get_character_movies_from_api(character)
-  parse_character_movies(films_hash)
+  films_hash_array = get_character_movies_from_api(character)
+  parse_character_movies(films_hash_array)
 end
 
-## BONUS
+def get_films_from_api(films_array)
+  films_array.map do |film|
+    film_req = RestClient.get(film)
+    film_hash = JSON.parse(film_req)
+  end
+end
 
-# that `get_character_movies_from_api` method is probably pretty long. Does it do more than one job?
-# can you split it up into helper methods?
+def merged_char_arr
+  character_arr = []
+  i = 1
+  9.times do
+    all_characters = RestClient.get("http://www.swapi.co/api/people/?page=#{i}")
+    pg_hash = JSON.parse(all_characters)
+    # binding.pry
+    character_arr << pg_hash["results"]
+    i += 1
+  end
+  character_arr.flatten(1)
+end
