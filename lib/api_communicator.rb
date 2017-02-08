@@ -3,26 +3,30 @@ require 'json'
 require 'pry'
 require_relative "../lib/command_line_interface.rb"
 
+FILMNUMS = {"The Phantom Menace" => 1,
+            "Attack of the Clones" => 2,
+            "Revenge of the Sith" =>3,
+            "A New Hope" => 4,
+            "The Empire Strikes Back" => 5,
+            "Return of the Jedi" => 6,
+            "The Force Awakens" => 7}
+
 def get_character_movies_from_api(character)
   films = []
   merged_char_arr.each do |char_hash|
-    if char_hash["name"].downcase == character.downcase
+    #binding.pry
+    if char_hash["name"].downcase.include? character.downcase
       puts "#{char_hash["name"]} has been in the following films:"
-      films = char_hash["films"]
+      films += char_hash["films"]
     end
   end
-  if films == []
-    puts "Invalid character, please try again."
-    character = get_character_from_user
-    get_character_movies_from_api(character)
-  else
-    get_films_from_api(films)
-  end
+  invalid_input(films)
 end
 
 def parse_character_movies(films_hash_array)
-  films_hash_array.each.with_index(1) do |movie, i|
-    puts "-- #{movie["title"]}"
+  sorted_films = films_hash_array.sort_by{|k,v| k["episode_id"]}.uniq
+  sorted_films.each do |movie, i|
+    puts "Ep. #{movie["episode_id"]} - #{movie["title"]}"
   end
 end
 
@@ -40,12 +44,22 @@ end
 
 def merged_char_arr
   character_arr = []
-  i = 1
-  9.times do
-    all_characters = RestClient.get("http://www.swapi.co/api/people/?page=#{i}")
-    pg_hash = JSON.parse(all_characters)
-    character_arr << pg_hash["results"]
-    i += 1
+  url = "http://www.swapi.co/api/people/?page=1"
+  begin
+    pg_characters = RestClient.get(url)
+    pg_hash = JSON.parse(pg_characters)
+    character_arr += pg_hash["results"]
+    url = pg_hash["next"]
+  end while url
+  character_arr
+end
+
+def invalid_input(films)
+  if films == []
+    puts "Invalid character, please try again."
+    character = get_character_from_user
+    get_character_movies_from_api(character)
+  else
+    get_films_from_api(films)
   end
-  character_arr.flatten(1)
 end
